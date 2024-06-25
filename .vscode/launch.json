@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "ROS: Launch",
+            "type": "ros",
+            "request": "launch",
+            "target": "${workspaceFolder}/src/${input:pkg}/launch/${input:launch}.launch",
+            "preLaunchTask": "make_debug",
+            "launch": [
+                "rviz",
+                "gzclient",
+                "gz",
+                "gzserver",
+                "rqt_reconfigure",
+            ]
+        },
+
+        {
+            "name": "ROS: Attach",
+            "type": "ros",
+            "request": "attach",
+        }
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "id": "launch",
+            "description": "Select launch file",
+            "options": [
+                "cam_mon"
+            ]
+        },
+        {
+            "type": "pickString",
+            "id": "pkg",
+            "description": "Select package",
+            "options": [
+                "cam_mon"
+            ]}
+    ]
+}

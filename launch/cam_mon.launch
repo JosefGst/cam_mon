@@ -1,0 +1,16 @@
+<launch>
+
+    <!-- args-->
+    <arg name="rate" default="10"/>
+    <arg name="pub_string" default="Hello World" />
+
+    <!-- lingao base_driver -->
+    <node pkg="cam_mon" name="cam_mon_node" type="cam_mon_node" output="screen">
+        <param name="rate" value="$(arg rate)"/>
+        <param name="pub_string" value="$(arg pub_string)"/>
+
+    </node>
+
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen"/>
+
+</launch>

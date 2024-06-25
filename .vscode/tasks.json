@@ -1,0 +1,75 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "make",
+            "detail": "Build workspace (default)",
+            "type": "catkin_make",
+            "problemMatcher": [
+                "$catkin-gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "make_debug",
+            "detail": "Build workspace with debug symbols",
+            "type": "catkin_make",
+            "args": [
+                "--directory",
+                "${workspaceFolder}",
+                "-DCMAKE_BUILD_TYPE=Debug"
+            ],
+            "problemMatcher": [
+                "$catkin-gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "make_pkg",
+            "detail": "Build specified package",
+            "type": "catkin_make",
+            "args": [
+                "--directory",
+                "${workspaceFolder}",
+                "--pkg",
+                "${input:pkg}"
+            ],
+            "problemMatcher": [
+                "$catkin-gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "label": "purge_make",
+            "detail": "Remove build and devel spaces & catkin_make",
+            "type": "shell",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "purge",
+                "make"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "purge",
+            "detail": "Remove build and devel spaces",
+            "type": "shell",
+            "command": "rm -rf build devel",
+            "problemMatcher": []
+        }
+        
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "pkg",
+            "description": "Enter package name",
+            "default": "template_sub_pub"
+        }]
+}
