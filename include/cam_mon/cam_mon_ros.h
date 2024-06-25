@@ -42,7 +42,7 @@ private:
     ros::NodeHandle nh_;
 
     void init_params();
-    void image_cb(const sensor_msgs::Image &msg);
+    void cam_cb(const sensor_msgs::Image &msg);
     
     /**
      * @brief Timer Callback function.
@@ -51,6 +51,8 @@ private:
      *
      */
     void timer_cb(const ros::TimerEvent &event);
+    void shutdown();
+    void restart();
     ros::Timer timer;
 
     std_msgs::String string_msg;
