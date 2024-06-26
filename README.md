@@ -12,11 +12,13 @@
   - [Linting](#linting)
 - [TODO](#todo)
 
-Node to monitors a camera node.
+Monitor a camera node.
 Sometimes the ROS node is running without showing any errors,  however no topics are published. In case the camera is not publishing or the image is overexposed then it will restart the node. 
 
 ## Setup 
+(Optional) For the demo to work install.
 
+    sudo apt install ros-noetic-usb-cam
     
 
 ## Run
