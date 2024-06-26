@@ -76,15 +76,8 @@ namespace ros_cam_mon
 
     image_msg = msg;
     bool overexposed = true;
-    for (size_t i = 0; i < image_msg.data.size(); i++)
-    {
-      if (image_msg.data[i] < global_config.overexposure_threshold)
-      {
-        overexposed = false;
-        break;
-      }
-    }
-    if (overexposed)
+    
+    if (is_overexposed(image_msg))
     {
       ROS_WARN("The image is overexposed!");
 
@@ -116,5 +109,18 @@ namespace ros_cam_mon
     startup();
     ROS_WARN_STREAM("sleep for [" << global_config.restart_delay << "] seconds to ensure node is up and running");
     sleep(global_config.restart_delay);
+  }
+
+  bool Cam_mon::is_overexposed(sensor_msgs::Image image_msg)
+  {
+
+    for (size_t i = 0; i < image_msg.data.size(); i++)
+    {
+      if (image_msg.data[i] < global_config.overexposure_threshold)
+      {
+        return false;
+      }
+    }
+    return true;
   }
 } // namespace ros_cam_mon

@@ -54,6 +54,7 @@ private:
     void shutdown();
     void startup();
     void restart_node();
+    bool is_overexposed(sensor_msgs::Image);
     ros::Timer timer;
 
     std_msgs::String string_msg;
