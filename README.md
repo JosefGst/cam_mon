@@ -3,47 +3,50 @@
 ## Contents
 
 - [Run](#run)
-- [Setup](#setup) 
-- [Published Topics](#published-topics)
+<!-- - [Setup](#setup)  -->
+<!-- - [Published Topics](#published-topics) -->
 - [Subscribed Topics](#subscribed-topics)
 - [Parameters](#parameters)
 - [Development](#development)
   - [Debugging C++](#debugging-c)
   - [Linting](#linting)
-  - [Create Documentation](#create-documentation)
 - [TODO](#todo)
 
-I kept copying code from the official documentation or from my previous works every time I created a new ROS package. With this cookiecutter template I hope the repetitive setup task can be reduced and I can jump directly into the development. For now it includes a simple publisher and subscriber, dynamic reconfigurable parameters, documentation generation with rosdoc_lite, linting and c++ debug setup.
+Node to monitors a camera node.
+Sometimes the ROS node is running without showing any errors,  however no topics are published. In case the camera is not publishing or the image is overexposed then it will restart the node. 
 
 ## Setup 
 
-    pipx install cookiecutter
-    cookiecutter git@github.com:JosefGst/template_sub_pub.git
-
-Choose name for the package, header and class.
+    
 
 ## Run
 
-    rosrun cam_mon cam_mon_node
-    rosrun cam_mon cam_mon_node _pub_string:="hello" _rate:=1
-    roslaunch cam_mon cam_mon.launch pub_string:="hello" rate:=1
+    roslaunch cam_mon cam_mon.launch 
 
-## Published Topics
+<!-- ## Published Topics
 
-- chatter [std_msgs/String](https://docs.ros.org/en/melodic/api/std_msgs/html/msg/String.html)
+- chatter [std_msgs/String](https://docs.ros.org/en/melodic/api/std_msgs/html/msg/String.html) -->
 
 ## Subscribed Topics
 
-- image [(geometry_msgs/Twist)](https://docs.ros.org/en/melodic/api/geometry_msgs/html/msg/Twist.html)
+- /usb_cam/image_raw [(sensor_msgs/Image)](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)
 
 ## Parameters
 
-- rate (int,default:1)
-  - publish rate of chatter" topic in [Hz]
-- pub_string (string,default:"Hello World")
-  - published string on chatter topic
+- mon_node (string,default: "usb_cam")
+  - Node to monitor
+- launch_cmd (string,default:"roslaunch usb_cam usb_cam-test.launch")
+  - cmd to restart the node
+- topic_timeout (double,default: 1.0)
+  - if no topic received during duration
+- startup_delay (double,default: 10.0)
+  - wait time in seconds until node is fully started before monitoring
+- restart_delay (double,default: 10.0)
+  - the shutdown takes time, wait time in seconds before restarting node
+- overexposure_threshold (int,default 245)
+  - theshold for the overexposure. If value is lower it is more sensible. (0 - 255)
 
-![graph](doc/assets/rosgraph.svg)
+![graph](assets/rosgraph.svg)
 
 ## Development
 
@@ -71,20 +74,6 @@ In root of workspace
 
     catkin_make roslint_cam_mon
 
-### create documentation
-
-In root of package
-
-    rosdoc_lite .
-
-To see the generated [documentation website](https://josefgst.github.io/cam_mon/doc/html/index.html).
-
 ## TODO
 
-- [x] make params reconfigurable
-- [x] debugging c++
-- [ ] add tests
-- [ ] github actions
-- [ ] ros2 branch
-- [x] automatic documentation generation
-- [ ] dockerization should be in separate docker_ws repo 
+- [ ] publish cmd_vel topic to stop the robot while restarting node

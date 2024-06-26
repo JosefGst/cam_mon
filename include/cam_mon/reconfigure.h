@@ -32,9 +32,8 @@ cam_mon::ReconfigureConfig global_config;
 
 void reconfigure_cb(cam_mon::ReconfigureConfig &config, uint32_t level)
 {
-  ROS_INFO("Reconfigure Request: %s, %f",
-           config.pub_string.c_str(),
-           config.topic_timeout);
+  // ROS_INFO("Reconfigure Request: %s, %f",
+  //          config.topic_timeout);
   global_config = config;
 }
 

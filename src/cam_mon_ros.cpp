@@ -40,9 +40,6 @@ namespace ros_cam_mon
 
   void Cam_mon::init_chatter()
   {
-    chatter_pub = nh_.advertise<std_msgs::String>("/chatter", 1);
-    ROS_INFO_STREAM("advertise to chatter topic on [" << chatter_pub.getTopic() << "]");
-
     image_sub = nh_.subscribe("/usb_cam/image_raw", 1, &Cam_mon::cam_cb, this);
     ROS_INFO_STREAM("subscribe to the image_raw topic on [" << image_sub.getTopic() << "]");
   }
@@ -59,10 +56,6 @@ namespace ros_cam_mon
 
   void Cam_mon::timer_cb(const ros::TimerEvent &event)
   {
-    ROS_INFO_STREAM("timer_cb, publish to chatter topic");
-    string_msg.data = global_config.pub_string;
-    chatter_pub.publish(string_msg);
-
     ROS_WARN("restart node!");
     restart_node();
   }
@@ -122,4 +115,4 @@ namespace ros_cam_mon
     }
     return true;
   }
-} // namespace ros_cam_mon
+}  // namespace ros_cam_mon

@@ -22,8 +22,8 @@
  * SOFTWARE.
  */
 
-#ifndef CAM_MON_ROS_H
-#define CAM_MON_ROS_H
+#ifndef CAM_MON_CAM_MON_ROS_H
+#define CAM_MON_CAM_MON_ROS_H
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
@@ -43,7 +43,6 @@ private:
 
     void init_params();
     void cam_cb(const sensor_msgs::Image &msg);
-    
     /**
      * @brief Timer Callback function.
      *
@@ -68,4 +67,4 @@ private:
 };
 }  // namespace ros_cam_mon
 
-#endif  // CAM_MON_ROS_H
+#endif  // CAM_MON_CAM_MON_ROS_H
