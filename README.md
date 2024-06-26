@@ -48,6 +48,7 @@ Sometimes the ROS node is running without showing any errors,  however no topics
 - overexposure_threshold (int,default 245)
   - theshold for the overexposure. If value is lower it is more sensible. (0 - 255)
 
+Demo graph for example
 ![graph](assets/rosgraph.svg)
 
 ## Development
