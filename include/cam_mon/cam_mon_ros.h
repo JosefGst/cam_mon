@@ -52,10 +52,12 @@ private:
      */
     void timer_cb(const ros::TimerEvent &event);
     void shutdown();
-    void restart();
+    void startup();
+    void restart_node();
     ros::Timer timer;
 
     std_msgs::String string_msg;
+    sensor_msgs::Image image_msg;
     ros::Publisher chatter_pub;
 
     ros::Subscriber image_sub;

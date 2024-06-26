@@ -35,7 +35,6 @@ namespace ros_cam_mon
     init_params();
     init_chatter();
 
-
     sleep(global_config.startup_delay);
     timer = nh_.createTimer(ros::Duration(1), &Cam_mon::timer_cb, this, true);
   }
@@ -65,11 +64,8 @@ namespace ros_cam_mon
   {
     string_msg.data = global_config.pub_string;
     chatter_pub.publish(string_msg);
-    shutdown();
-    sleep(global_config.restart_delay);
-    
-    restart();
-    sleep(global_config.restart_delay);
+
+    restart_node();
   }
 
   void Cam_mon::cam_cb(const sensor_msgs::Image &msg)
@@ -78,7 +74,22 @@ namespace ros_cam_mon
     // reset timer
     timer.setPeriod(ros::Duration(global_config.topic_timeout), true);
 
-    
+    image_msg = msg;
+    bool overexposed = true;
+    for (size_t i = 0; i < image_msg.data.size(); i++)
+    {
+      if (image_msg.data[i] < global_config.overexposure_threshold)
+      {
+        overexposed = false;
+        break;
+      }
+    }
+    if (overexposed)
+    {
+      ROS_WARN("The image is overexposed!");
+
+      restart_node();
+    }
   }
 
   void Cam_mon::shutdown()
@@ -89,11 +100,21 @@ namespace ros_cam_mon
     system(kill_cmd.c_str());
   }
 
-  void Cam_mon::restart()
+  void Cam_mon::startup()
   {
     std::string restart_cmd = std::string(global_config.launch_cmd.c_str()) + "&";
-    ROS_WARN_STREAM("restart node: " << restart_cmd.c_str());
+    ROS_WARN_STREAM("start node: " << restart_cmd.c_str());
     system(restart_cmd.c_str());
   }
 
-}  // namespace ros_cam_mon
+  void Cam_mon::restart_node()
+  {
+    shutdown();
+    ROS_WARN_STREAM("sleep for [" << global_config.restart_delay << "] seconds before starting the node again");
+    sleep(global_config.restart_delay);
+
+    startup();
+    ROS_WARN_STREAM("sleep for [" << global_config.restart_delay << "] seconds to ensure node is up and running");
+    sleep(global_config.restart_delay);
+  }
+} // namespace ros_cam_mon
