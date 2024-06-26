@@ -3,7 +3,7 @@
 ## Contents
 
 - [Run](#run)
-<!-- - [Setup](#setup)  -->
+- [Setup](#setup) 
 <!-- - [Published Topics](#published-topics) -->
 - [Subscribed Topics](#subscribed-topics)
 - [Parameters](#parameters)
