@@ -64,7 +64,7 @@ private:
     ros::Subscriber image_sub;
 
     // PARAMS
-    int rate = 1;
+    double startup_delay;
 };
 }  // namespace ros_cam_mon
 

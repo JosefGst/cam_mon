@@ -35,7 +35,7 @@ namespace ros_cam_mon
     init_params();
     init_chatter();
 
-    timer = nh_.createTimer(ros::Duration(10), &Cam_mon::timer_cb, this, true);
+    timer = nh_.createTimer(ros::Duration(startup_delay), &Cam_mon::timer_cb, this, true);
   }
 
   void Cam_mon::init_chatter()
@@ -49,14 +49,12 @@ namespace ros_cam_mon
 
   void Cam_mon::init_params()
   {
-    if (!nh_.param("rate", rate, 10))
-    {
-      ROS_WARN("No rate set. Default is 10");
-    }
-    if (!nh_.param("pub_string", global_config.pub_string, std::string("Hello World!")))
-    {
-      ROS_WARN("No pub_string set. Default is 'Hello World!'");
-    }
+    nh_.param("mon_node", global_config.mon_node, std::string("usb_cam"));
+    nh_.param("launch_cmd", global_config.launch_cmd, std::string("roslaunch usb_cam usb_cam-test.launch"));
+    nh_.param("topic_timeout", global_config.topic_timeout, 1.0);
+    nh_.param("startup_delay", startup_delay, 10.0);
+    nh_.param("restart_delay", global_config.restart_delay, 10.0);
+    nh_.param("overexposure_threshold", global_config.overexposure_threshold, 245);
   }
 
   void Cam_mon::timer_cb(const ros::TimerEvent &event)
@@ -66,7 +64,7 @@ namespace ros_cam_mon
     chatter_pub.publish(string_msg);
 
     ROS_WARN("restart node!");
-    // restart_node();
+    restart_node();
   }
 
   void Cam_mon::cam_cb(const sensor_msgs::Image &msg)
@@ -80,10 +78,13 @@ namespace ros_cam_mon
     if (is_overexposed(image_msg))
     {
       ROS_WARN("The image is overexposed!");
-      // restart_node();
+      restart_node();
     }
   }
 
+  // ----------------------------------------------------------------
+  // HELPER FUNCTIONS **********************************************
+  // ----------------------------------------------------------------
   void Cam_mon::shutdown()
   {
     ROS_WARN_STREAM("topic not published since [" << global_config.topic_timeout << "] seconds");

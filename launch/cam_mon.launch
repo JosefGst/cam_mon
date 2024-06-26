@@ -1,14 +1,24 @@
 <launch>
 
     <!-- args-->
-    <arg name="rate" default="10"/>
-    <arg name="pub_string" default="Hello World" />
+    <arg name="mon_node" default="usb_cam"/>
+    <arg name="launch_cmd" default="roslaunch usb_cam usb_cam-test.launch"/>
+    <arg name="topic_timeout" default="1.0"/>
+    <arg name="startup_delay" default="10.0"/>
+    <arg name="restart_delay" default="10.0"/>
+    <arg name="overexposure_threshold" default="245"/>
+    <arg name="cam_topic" default="/usb_cam/image_raw"/>
 
     <!-- lingao base_driver -->
-    <node pkg="cam_mon" name="cam_mon_node" type="cam_mon_node" output="screen">
-        <param name="rate" value="$(arg rate)"/>
-        <param name="pub_string" value="$(arg pub_string)"/>
+    <node pkg="cam_mon" name="cam_mon_node" type="cam_mon_node" output="screen" clear_params="true" required="true">
+        <param name="mon_node" value="$(arg mon_node)" />
+        <param name="launch_cmd" value="$(arg launch_cmd)" />
+        <param name="topic_timeout" value="$(arg topic_timeout)" />
+        <param name="startup_delay" value="$(arg startup_delay)" />
+        <param name="restart_delay" value="$(arg restart_delay)" />
+        <param name="overexposure_threshold" value="$(arg overexposure_threshold)" />
 
+        <remap from="/usb_cam/image_raw" to="$(arg cam_topic)"/>
     </node>
 
     <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen"/>
