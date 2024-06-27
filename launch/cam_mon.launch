@@ -2,7 +2,7 @@
 
     <!-- args-->
     <arg name="mon_node" default="usb_cam"/>
-    <arg name="launch_cmd" default="roslaunch usb_cam usb_cam-test.launch"/>
+    <arg name="launch_cmd" default="gnome-terminal -- roslaunch usb_cam usb_cam-test.launch"/>
     <arg name="topic_timeout" default="1.0"/>
     <arg name="startup_delay" default="10.0"/>
     <arg name="restart_delay" default="10.0"/>
@@ -21,6 +21,6 @@
         <remap from="/usb_cam/image_raw" to="$(arg cam_topic)"/>
     </node>
 
-    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen"/>
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen" if="false"/>
 
 </launch>
