@@ -2,7 +2,8 @@
 
     <!-- args-->
     <arg name="mon_node" default="usb_cam"/>
-    <arg name="launch_cmd" default="gnome-terminal -- roslaunch usb_cam usb_cam-test.launch"/>
+    <arg name="enable_cmd" default="rosservice call /cameraF_down/enable 'data: true'"/>
+    <arg name="disable_cmd" default="rosservice call /cameraF_down/enable 'data: false'"/>
     <arg name="topic_timeout" default="1.0"/>
     <arg name="startup_delay" default="10.0"/>
     <arg name="restart_delay" default="10.0"/>
@@ -12,7 +13,8 @@
     <!-- lingao base_driver -->
     <node pkg="cam_mon" name="cam_mon_node" type="cam_mon_node" output="screen" clear_params="true" required="true">
         <param name="mon_node" value="$(arg mon_node)" />
-        <param name="launch_cmd" value="$(arg launch_cmd)" />
+        <param name="enable_cmd" value="$(arg enable_cmd)" />
+        <param name="disable_cmd" value="$(arg disable_cmd)" />
         <param name="topic_timeout" value="$(arg topic_timeout)" />
         <param name="startup_delay" value="$(arg startup_delay)" />
         <param name="restart_delay" value="$(arg restart_delay)" />
@@ -21,6 +23,6 @@
         <remap from="/usb_cam/image_raw" to="$(arg cam_topic)"/>
     </node>
 
-    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen" if="false"/>
+    <!-- <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="rqt_reconfigure" output="screen"/> -->
 
 </launch>

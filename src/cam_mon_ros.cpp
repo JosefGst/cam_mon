@@ -47,7 +47,8 @@ namespace ros_cam_mon
   void Cam_mon::init_params()
   {
     nh_.param("mon_node", global_config.mon_node, std::string("usb_cam"));
-    nh_.param("launch_cmd", global_config.launch_cmd, std::string("roslaunch usb_cam usb_cam-test.launch"));
+    nh_.param("enable_cmd", global_config.enable_cmd, std::string("rosservice call /cameraF_down/enable 'data: true'"));
+    nh_.param("disable_cmd", global_config.disable_cmd, std::string("rosservice call /cameraF_down/enable 'data: false' "));
     nh_.param("topic_timeout", global_config.topic_timeout, 1.0);
     nh_.param("startup_delay", startup_delay, 10.0);
     nh_.param("restart_delay", global_config.restart_delay, 10.0);
@@ -68,7 +69,7 @@ namespace ros_cam_mon
 
     image_msg = msg;
 
-    if (is_overexposed(image_msg))
+    if (is_overexposed(image_msg, 50))
     {
       ROS_WARN("The image is overexposed!");
       restart_node();
@@ -82,15 +83,15 @@ namespace ros_cam_mon
   {
     ROS_WARN_STREAM("topic not published since [" << global_config.topic_timeout << "] seconds");
     ROS_WARN_STREAM("shutdown: [" << global_config.mon_node.c_str() << "]");
-    std::string kill_cmd = std::string("rosnode kill /") + global_config.mon_node.c_str();
-    system(kill_cmd.c_str());
+    std::string disable_cmd = std::string(global_config.disable_cmd.c_str()) + "&";
+    system(disable_cmd.c_str());
   }
 
   void Cam_mon::startup()
   {
-    std::string restart_cmd = std::string(global_config.launch_cmd.c_str()) + "&";
-    ROS_WARN_STREAM("start node: " << restart_cmd.c_str());
-    system(restart_cmd.c_str());
+    std::string enable_cmd = std::string(global_config.enable_cmd.c_str()) + "&";
+    ROS_WARN_STREAM("start node: " << enable_cmd.c_str());
+    system(enable_cmd.c_str());
   }
 
   void Cam_mon::restart_node()
@@ -104,13 +105,20 @@ namespace ros_cam_mon
     sleep(global_config.restart_delay);
   }
 
-  bool Cam_mon::is_overexposed(sensor_msgs::Image image_msg)
+  bool Cam_mon::is_overexposed(sensor_msgs::Image image_msg, int white_points_threshold)
   {
+    int white_points_cnt = 0;
     for (size_t i = 0; i < image_msg.data.size(); i++)
     {
       if (image_msg.data[i] < global_config.overexposure_threshold)
       {
-        return false;
+        white_points_cnt++;
+        // ROS_WARN_STREAM("white_points_cnt [" << white_points_cnt << "]");
+      }
+
+      if (white_points_cnt > white_points_threshold){
+        ROS_WARN_STREAM("OVEREXPOSED [" << global_config.mon_node << "]");
+        return true;
       }
     }
     return true;
