@@ -27,7 +27,6 @@
 
 #include "ros/ros.h"
 #include "std_msgs/String.h"
-#include "geometry_msgs/Twist.h"
 #include "sensor_msgs/Image.h"
 
 namespace ros_cam_mon
@@ -36,34 +35,22 @@ class Cam_mon
 {
 public:
     Cam_mon();
-    void init_chatter();
+    void init_monitor();
 
 private:
     ros::NodeHandle nh_;
 
     void init_params();
     void cam_cb(const sensor_msgs::Image &msg);
-    /**
-     * @brief Timer Callback function.
-     *
-     * Main Function which is frequently called by the timer.
-     *
-     */
-    void timer_cb(const ros::TimerEvent &event);
     void shutdown();
     void startup();
     void restart_node();
-    bool is_overexposed(sensor_msgs::Image);
-    ros::Timer timer;
 
     std_msgs::String string_msg;
     sensor_msgs::Image image_msg;
-    ros::Publisher chatter_pub;
 
     ros::Subscriber image_sub;
 
-    // PARAMS
-    double startup_delay;
 };
 }  // namespace ros_cam_mon
 

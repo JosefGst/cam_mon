@@ -3,7 +3,7 @@
 ## Contents
 
 - [Run](#run)
-- [Setup](#setup) 
+- [Requirenments](#requirenments) 
 <!-- - [Published Topics](#published-topics) -->
 - [Subscribed Topics](#subscribed-topics)
 - [Parameters](#parameters)
@@ -12,13 +12,11 @@
   - [Linting](#linting)
 - [TODO](#todo)
 
-Monitor a camera node.
-Sometimes the ROS node is running without showing any errors,  however no topics are published. In case the camera is not publishing or the image is overexposed then it will restart the node. 
+Monitor a realsense camera node.
+The realsense camera frequemtly keeps overexposing the image during startup. To emitigate this issue a simple disable and enable service call can reduce this issue successfuly. The node subscribe to the image topic. Once a image is received the camera will be disabled and reenabled. Afterwards the node has done it's part and shuts down.
 
-## Setup 
-(Optional) For the demo to work install.
-
-    sudo apt install ros-noetic-usb-cam
+## Requirenments 
+Only works with realsense camera.
     
 
 ## Run
@@ -35,18 +33,12 @@ Sometimes the ROS node is running without showing any errors,  however no topics
 
 ## Parameters
 
-- mon_node (string,default: "usb_cam")
-  - Node to monitor
-- launch_cmd (string,default:"roslaunch usb_cam usb_cam-test.launch")
-  - cmd to restart the node
-- topic_timeout (double,default: 1.0)
-  - if no topic received during duration
-- startup_delay (double,default: 10.0)
-  - wait time in seconds until node is fully started before monitoring
+- enable_cmd (string,default:"rosservice call /cameraF_down/enable 'data: true'")
+  - cmd to enable realsense camera
+- disable_cmd (string,default:"rosservice call /cameraF_down/enable 'data: false'")
+  - cmd to disable realsense camera
 - restart_delay (double,default: 10.0)
-  - the shutdown takes time, wait time in seconds before restarting node
-- overexposure_threshold (int,default 245)
-  - theshold for the overexposure. If value is lower it is more sensible. (0 - 255)
+  - wait time in seconds before reenabeling the realsense cam
 
 Demo graph for example
 ![graph](assets/rosgraph.svg)
@@ -78,5 +70,3 @@ In root of workspace
     catkin_make roslint_cam_mon
 
 ## TODO
-
-- [ ] publish cmd_vel topic to stop the robot while restarting node
