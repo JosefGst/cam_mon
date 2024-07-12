@@ -42,15 +42,28 @@ private:
 
     void init_params();
     void cam_cb(const sensor_msgs::Image &msg);
-    void shutdown();
-    void startup();
+    void disable();
+    void enable();
     void restart_node();
+    void launch_cmd();
+    void timer_cb(const ros::TimerEvent &event);
+    void sm_timer_cb(const ros::TimerEvent &event);
+    ros::Timer timer;
+    ros::Timer sm_timer;
+
 
     std_msgs::String string_msg;
     sensor_msgs::Image image_msg;
 
     ros::Subscriber image_sub;
-
+    
+    float rate = 5.0;
+    bool timer_reset = true;
+    bool oneshot = true;
+    bool oneshot_off = false;
+    bool autostart_off = false;
+    int state = 0;
+    int state_zero_counter = 0;
 };
 }  // namespace ros_cam_mon
 

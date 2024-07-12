@@ -3,6 +3,7 @@
     <!-- args-->
     <arg name="enable_cmd" default="rosservice call /cameraF_down/enable 'data: true'"/>
     <arg name="disable_cmd" default="rosservice call /cameraF_down/enable 'data: false'"/>
+    <arg name="launch_cmd" default="roslaunch bringup rs_cameraF_down.launch"/>
     <arg name="restart_delay" default="10.0"/>
     <arg name="cam_topic" default="/usb_cam/image_raw"/>
     <arg name="open_reconfigure" default="true"/>
@@ -11,6 +12,7 @@
     <node pkg="cam_mon" name="cam_mon_node" type="cam_mon_node" output="screen" clear_params="true">
         <param name="enable_cmd" value="$(arg enable_cmd)" />
         <param name="disable_cmd" value="$(arg disable_cmd)" />
+        <param name="launch_cmd" value="$(arg launch_cmd)"/>
         <param name="restart_delay" value="$(arg restart_delay)" />
 
         <remap from="/usb_cam/image_raw" to="$(arg cam_topic)"/>

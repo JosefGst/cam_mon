@@ -37,6 +37,8 @@ Only works with realsense camera.
   - cmd to enable realsense camera
 - disable_cmd (string,default:"rosservice call /cameraF_down/enable 'data: false'")
   - cmd to disable realsense camera
+- launch_cmd (string,default:"roslaunch bringup rs_cameraF_down.launch")
+  - launch camera if there's no topic published
 - restart_delay (double,default: 10.0)
   - wait time in seconds before reenabeling the realsense cam
 
