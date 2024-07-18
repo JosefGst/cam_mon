@@ -57,7 +57,7 @@ private:
 
     ros::Subscriber image_sub;
     
-    float rate = 5.0;
+    float rate = 1.0;
     bool timer_reset = true;
     bool oneshot = true;
     bool oneshot_off = false;
